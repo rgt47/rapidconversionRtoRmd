@@ -7,7 +7,7 @@ categories: [R Programming, Data Science, Statistical Computing, Reproducible Re
 description: "Learn how to rapidly convert draft R scripts into professional Rmd reports with automated wrapper generation and publication-quality formatting"
 image: "../../images/posts/ucsd-geisel-library.jpg"
 document-type: "blog"
-draft: true
+draft: false
 execute:
   echo: true
   warning: false
