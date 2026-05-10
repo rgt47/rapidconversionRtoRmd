@@ -97,7 +97,7 @@ the specific concern the post addresses.
 I am documenting my learning process here. If you spot
 errors or have better approaches, please let me know.
 
-![Settling in for a focused coding session.](media/images/placeholder-coffee-01.jpg){.img-fluid width=30% fig-align="center"}
+![Settling in for a focused coding session.](media/images/ambiance1.png){.img-fluid width=30% fig-align="center"}
 
 # Prerequisites and Setup
 
