@@ -44,11 +44,11 @@ results, they rarely want a raw R script. They want
 tables, figures, narrative context, and a document they
 can read without opening RStudio.
 
-This post walks through several approaches to bridging
-the gap between a working R script and a finished R
-Markdown report. The goal is practical: reduce the
-friction between "my code works" and "here is a
-document someone can read."
+We walk through several approaches to bridging the gap
+between a working R script and a finished R Markdown
+report. The goal is practical: reduce the friction
+between "my code works" and "here is a document
+someone can read."
 
 More formally, this post documents the script-to-document
 promotion path in the Document layer of the Workflow Construct
@@ -92,8 +92,8 @@ the specific concern the post addresses.
    formatting across multiple script-to-report
    conversions.
 
-I am documenting my learning process here. If you spot
-errors or have better approaches, please let me know.
+I am documenting my learning process here. Errors and
+better approaches are welcome; see the contact section.
 
 ![Settling in for a focused coding session.](media/images/ambiance1.png){.img-fluid width=30% fig-align="center"}
 
@@ -124,8 +124,8 @@ library(rmarkdown)
 # What is Script-to-Report Conversion?
 
 Script-to-report conversion is the process of
-transforming a plain R script -- a `.R` file containing
-code, comments, and possibly some inline output -- into
+transforming a plain R script (a `.R` file containing
+code, comments, and possibly some inline output) into
 a formatted document that weaves together code, results,
 and narrative text. The output is typically an HTML page,
 PDF, or Word document that a non-programmer can read
@@ -133,12 +133,12 @@ without needing to run any code.
 
 Think of it as the reverse of the usual R Markdown
 workflow. Instead of starting with a `.qmd` or `.Rmd`
-file and embedding code chunks, you start with a
-working `.R` file and add just enough structure to
-produce a readable report. The key insight is that your
-existing comments can serve as the narrative, and your
+file and embedding code chunks, one starts with a
+working `.R` file and adds just enough structure to
+produce a readable report. The key insight is that
+existing comments can serve as the narrative, and
 existing code already produces the figures and tables
-you need.
+needed.
 
 # Getting Started: The Problem with Raw Scripts
 
@@ -182,7 +182,7 @@ this problem at different levels of effort and control.
 ![Transitioning from raw scripts to structured
 reports](media/images/ambiance2.png){.img-fluid}
 
-# Approach 1: `knitr::spin()` -- The Fastest Path
+# Approach 1: `knitr::spin()` (The Fastest Path)
 
 The `knitr::spin()` function converts a specially
 annotated R script directly into an R Markdown document
@@ -203,7 +203,7 @@ carry special meaning:
   chunk with explicit options.
 
 Everything else is treated as R code inside the current
-chunk. This means you can annotate an existing script
+chunk. This means an existing script can be annotated
 with minimal changes.
 
 ## Annotating an Existing Script
@@ -278,9 +278,9 @@ knitr::spin("analysis_script.R", knit = FALSE)
 ```
 
 Setting `knit = FALSE` produces the `.Rmd` file without
-rendering it, which is useful when you want to inspect
-or edit the intermediate Markdown before producing the
-final document. To generate the report directly:
+rendering it, which is useful for inspecting or editing
+the intermediate Markdown before producing the final
+document. To generate the report directly:
 
 ```{r}
 #| eval: false
@@ -360,8 +360,8 @@ covers the most common needs:
 Manual conversion is preferable when the R script
 contains code that should not appear in the report (data
 cleaning steps, debugging statements, exploratory
-tangents). The conversion process naturally forces you
-to curate what the reader sees, which often improves
+tangents). The conversion process naturally requires
+curation of what the reader sees, which often improves
 the document.
 
 # Approach 3: RStudio's "Compile Report"
@@ -442,9 +442,9 @@ correctly.
 
 1. **Chunk boundaries matter in spin().** Every line of
    code between `#'` blocks becomes a single chunk. If
-   you need separate chunks for different options (such
-   as hiding one block while showing another), insert a
-   `#+ ` line to start a new chunk explicitly.
+   separate chunks are needed for different options (such
+   as hiding one block while showing another), inserting
+   a `#+ ` line starts a new chunk explicitly.
 
 2. **YAML must be exact.** The `#' ---` lines in a
    spin-annotated script must follow YAML syntax
@@ -465,11 +465,10 @@ correctly.
    before running `spin()`.
 
 5. **The "Compile Report" button uses the global R
-   environment.** If your script depends on objects
-   created in a previous session, the report will fail
-   when rendered in a clean session. Always test with
-   `rmarkdown::render()` in a fresh R session to catch
-   environment dependencies.
+   environment.** Scripts that depend on objects created
+   in a previous session will fail when rendered in a
+   clean session. Testing with `rmarkdown::render()` in
+   a fresh R session catches environment dependencies.
 
 # Comparing the Three Approaches
 
@@ -637,44 +636,42 @@ than fifteen minutes for a typical analytical script,
 compared to forty-five minutes or more for a from-
 scratch manual conversion.
 
-**Main takeaways:**
+In conclusion, four points merit emphasis. First,
+`knitr::spin()` converts annotated `.R` scripts to
+`.Rmd` using three comment styles: `#'`, `#+`, and
+`#-`. Second, RStudio's "Compile Report" runs `spin()`
+behind the scenes with zero setup. Third, manual
+conversion provides full control and remains necessary
+for Quarto-based projects. Fourth, the spin-then-edit
+workflow balances speed with document quality.
 
-- `knitr::spin()` converts annotated `.R` scripts to
-  `.Rmd` with three comment styles: `#'`, `#+`, `#-`.
-- RStudio's "Compile Report" runs `spin()` behind the
-  scenes with zero setup.
-- Manual conversion provides full control and is
-  necessary for Quarto-based projects.
-- The spin-then-edit workflow balances speed with
-  document quality.
-
-If you have R scripts sitting in a project folder
-producing results that no one else can easily read, try
-running `knitr::spin("your_script.R", knit = FALSE)`
-and see what comes out. The result is often closer to a
-finished report than you would expect.
+For R scripts sitting in a project folder producing
+results that no one else can easily read, running
+`knitr::spin("your_script.R", knit = FALSE)` and
+inspecting the output is worthwhile. The result is
+often closer to a finished report than anticipated.
 
 # See Also
 
 **Related resources:**
 
 - [knitr::spin() documentation](
-  https://yihui.org/knitr/demo/stitch/)
-  -- Yihui Xie's official documentation and examples
+  https://yihui.org/knitr/demo/stitch/):
+  Yihui Xie's official documentation and examples
   for the spin function.
 - [R Markdown: The Definitive Guide](
-  https://bookdown.org/yihui/rmarkdown/)
-  -- Comprehensive reference covering all aspects of R
+  https://bookdown.org/yihui/rmarkdown/):
+  Comprehensive reference covering all aspects of R
   Markdown document creation.
-- [Quarto documentation](https://quarto.org/docs/get-started/)
-  -- Official guide for Quarto, the next-generation
+- [Quarto documentation](https://quarto.org/docs/get-started/):
+  Official guide for Quarto, the next-generation
   publishing system for R, Python, and Julia.
 - [knitr in a knutshell](
-  https://kbroman.org/knitr_knutshell/)
-  -- Karl Broman's concise tutorial on knitr, including
+  https://kbroman.org/knitr_knutshell/):
+  Karl Broman's concise tutorial on knitr, including
   spin usage patterns.
 - [R for Data Science, 2nd edition](
-  https://r4ds.hadley.nz/) -- Hadley Wickham and
+  https://r4ds.hadley.nz/): Hadley Wickham and
   colleagues' guide to modern R workflows, including
   communication and reporting chapters.
 
@@ -683,7 +680,7 @@ finished report than you would expect.
 This post describes workflow patterns rather than a
 specific analysis pipeline. The code examples use base
 R, `knitr`, `rmarkdown`, and `ggplot2`. To test the
-spin workflow on your own machine:
+spin workflow:
 
 ```{r}
 #| eval: false
@@ -723,11 +720,10 @@ sessionInfo()
 
 I would enjoy hearing from you if:
 
-- You spot an error or a better approach to any of the
-  code in this post.
-- You have suggestions for topics you would like to see
-  covered.
-- You want to discuss R programming, data science, or
-  reproducible research.
-- You have questions about anything in this tutorial.
-- You just want to say hello and connect.
+- An error or a better approach to any of the code
+  in this post comes to mind.
+- There are suggestions for topics to see covered.
+- The interest is in discussing R programming, data
+  science, or reproducible research.
+- There are questions about anything in this tutorial.
+- The goal is simply to say hello and connect.
